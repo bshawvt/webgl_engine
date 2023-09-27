@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<script type="application/javascript" src="documentation.js"></script>
+		<!-- <script type="application/javascript" src=""></script> -->
+		<!-- <link rel="stylesheet" type="text/css" href="default.css"/> -->
+		<style>
+			.overflow-scroll {
+				overflow: scroll;
+			}
+			.overflow-hide {
+				overflow: hidden;
+			}
+			.absolute {
+				position: absolute;
+			}
+			.full-width {
+				width: 100%;
+			}
+			.full-height {
+				height: 100%;
+			}
+			.fill-width {
+				left: 0px;
+				right: 0px;
+			}
+			.fill-height {
+				top: 0px;
+				bottom: 0px;
+			}
+			.auto-height {
+				height: 0;
+			}
+			.auto-width {
+				width: 0;
+			}
+			.fullscreen {
+				left: 5px;
+				right: 5px;
+				top: 5px;
+				bottom: 5px;
+			}
+			.indent {
+				padding: 0.2em;
+				font-size: 1em;
+				background-color: #a0a0a04f;
+				color: #0b29a0;
+				font-style: italic;
+				font-family: monospace;
+			}
+			.padded {
+				padding: 10px;
+			}
+			.bordered {
+				border: 1px solid #000;
+			}
+			tfoot > tr > th {
+				height: 20px;
+			}
+			thead > tr > th {
+				font-size: 64px;
+				height: 100px;
+			}
+			a:hover {
+			
+			}
+			a:hover {
+			
+			}
+			a:hover {
+			
+			}
+			
+		</style>
+		<script type="application/javascript">			
+			document.addEventListener("DOMContentLoaded", function() {
+				for(var name in docs) {
+					addNavigation(name, docs[name]);
+				}
+			});
+			function makeElement(type, parent, style, innerText) {
+				var element = document.createElement(type);
+				if (style)
+					element.className = style;
+				if (innerText) 
+					element.appendChild(document.createTextNode(innerText));
+				parent.appendChild(element);
+				
+				return element;
+			};
+			function parseTextToHTML(input, parent) {
+				var ch = "";
+				var tag = "";
+				var characters = "";
+				var tagState = false;
+				var indentState = false;
+				//var elements = [];
+				for(var i = 0; i < input.length; i++) {
+					ch = input[i];
+					if (ch == '\n') {
+						if (indentState)
+							 makeElement("span", parent, "indent", characters);
+						else 
+							makeElement("span", parent, null, characters);
+						makeElement("br", parent);
+						characters = "";
+						continue;
+					}
+					else if (ch == '`') {
+						if (!indentState)
+							makeElement("span", parent, null, characters);
+						else
+							makeElement("span", parent, "indent", characters);
+						indentState = !indentState;
+						characters = "";
+						continue;
+					}
+					characters += ch;
+				};
+				if (characters.length > 0)
+					makeElement("span", parent, null, characters);
+			};
+			function addNavigation(name, details) {
+				var nav = document.getElementById("document-nav");
+				var body = document.getElementById("document-body");
+				var foot = document.getElementById("document-footer");
+				var head = document.getElementById("document-header");
+				var tr = makeElement("tr", nav);
+				var td = makeElement("td", tr);
+				var a = makeElement("a", td, null, name);
+				a.setAttribute("href", "javascript:{}");
+				a.onclick = function() {
+					console.log("clicked menu item...");
+					if(body.children.length > 0) {
+						console.log("something exists in body.. removing");
+						body.children[0].remove();
+					}
+					parseTextToHTML(details, makeElement("div", body));
+					console.log("adding body content...");
+				};
+				var old = function(e) {
+					console.log("bodyContainer: ", bodyContainer);
+					if (bodyContainer) {
+						body.children[0].remove();
+						console.log("bodyContainer: ", bodyContainer);
+					}
+					bodyContainer = makeElement("div", body);
+					bodyContainer.innerText = "!";
+					//parseTextToHTML(details, bodyContainer);
+					//head.innerText = name;
+				};
+				td.className = "bordered";
+			};
+		</script>
+	</head>
+	<body class="absolute fill-width fill-height">
+		<table class="absolute full-width full-height bordered">
+			<thead class="bordered">
+				<tr>
+					<th id="document-header" class="bordered" colspan="2">
+						<!-- header content -->
+						<div>
+							
+						</div>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="bordered auto-width">
+						<table>
+							<tbody id="document-nav">
+								<!-- nav items -->
+							</tbody>
+						</table>
+					</td>
+					<td id="document-body" class="bordered padded">
+						<!-- nav content -->
+						<div>
+							<sub>Last updated: <span>September 26, 2023</span></sub>
+							<br/>
+							This contains documentation to describe the project and how to use it. It may or may not be complete or up-to-date.
+							<br/><br/><br/>
+							Select a menu item to read more.
+						</div>
+					</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<th id="document-footer" class="bordered" colspan="2">
+						<!-- footer content -->
+						<div>
+							A WebGL Thing Documentation
+						</div>
+					</th>
+				</tr>
+			</tfoot>
+		</table>
+	</body>
+</html>

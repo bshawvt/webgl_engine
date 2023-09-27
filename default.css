@@ -1,0 +1,42 @@
+.absolute {
+	position: absolute;
+}
+.fixed {
+	position: fixed;
+}
+.full-width {
+	width: 100%;
+}
+.full-height {
+	height: 100%;
+}
+.fill-width {
+	left: 0px;
+	right: 0px;
+}
+.fill-height {
+	top: 0px;
+	bottom: 0px;
+}
+.fullscreen {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100%;
+}
+a {
+
+}
+a:link {
+
+}
+a:visited {
+
+}
+a:hover {
+
+}
+a:active {
+
+}
