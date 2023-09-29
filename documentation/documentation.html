@@ -4,8 +4,10 @@
 		<meta charset="utf-8"/>
 		<script type="application/javascript" src="documentation.js"></script>
 		<!-- <script type="application/javascript" src=""></script> -->
-		<!-- <link rel="stylesheet" type="text/css" href="default.css"/> -->
+		<!-- <link rel="stylesheet" type="text/css" href="style.css"/> -->
 		<style>
+			body {
+			}
 			.overflow-scroll {
 				overflow: scroll;
 			}
@@ -45,9 +47,10 @@
 				padding: 0.2em;
 				font-size: 1em;
 				background-color: #a0a0a04f;
-				color: #0b29a0;
+				color: #112ea2;
 				font-style: italic;
 				font-family: monospace;
+				text-shadow: none;
 			}
 			.padded {
 				padding: 10px;
@@ -62,22 +65,30 @@
 				font-size: 64px;
 				height: 100px;
 			}
-			a:hover {
-			
+			a {
+				font-size: 1.2em;
+				margin:5px;
+				color: #4040e0;
 			}
 			a:hover {
-			
+				color: #7eb58b;
 			}
-			a:hover {
-			
+			a:active {
+				color: #50505b;
 			}
-			
+			a:focus {
+				color: #50505b;
+			}
+			a:visited {
+				color: #464184;
+			}
 		</style>
 		<script type="application/javascript">			
 			document.addEventListener("DOMContentLoaded", function() {
 				for(var name in docs) {
 					addNavigation(name, docs[name]);
 				}
+				addNavigation(null, null).className = "full-height";
 			});
 			function makeElement(type, parent, style, innerText) {
 				var element = document.createElement(type);
@@ -86,7 +97,6 @@
 				if (innerText) 
 					element.appendChild(document.createTextNode(innerText));
 				parent.appendChild(element);
-				
 				return element;
 			};
 			function parseTextToHTML(input, parent) {
@@ -95,7 +105,6 @@
 				var characters = "";
 				var tagState = false;
 				var indentState = false;
-				//var elements = [];
 				for(var i = 0; i < input.length; i++) {
 					ch = input[i];
 					if (ch == '\n') {
@@ -129,28 +138,23 @@
 				var tr = makeElement("tr", nav);
 				var td = makeElement("td", tr);
 				var a = makeElement("a", td, null, name);
-				a.setAttribute("href", "javascript:{}");
+				a.setAttribute("href", `#${name}`);
 				a.onclick = function() {
-					console.log("clicked menu item...");
-					if(body.children.length > 0) {
-						console.log("something exists in body.. removing");
+					if(body.children.length > 0)
 						body.children[0].remove();
-					}
-					parseTextToHTML(details, makeElement("div", body));
-					console.log("adding body content...");
+					parseTextToHTML(details, makeElement("div", body, 'full-height'));
+					if (head.children.length > 0)
+						head.children[0].remove();
+					makeElement("div", head, null, name);
 				};
 				var old = function(e) {
 					console.log("bodyContainer: ", bodyContainer);
-					if (bodyContainer) {
+					if (bodyContainer)
 						body.children[0].remove();
-						console.log("bodyContainer: ", bodyContainer);
-					}
 					bodyContainer = makeElement("div", body);
-					bodyContainer.innerText = "!";
-					//parseTextToHTML(details, bodyContainer);
-					//head.innerText = name;
 				};
 				td.className = "bordered";
+				return tr;
 			};
 		</script>
 	</head>
@@ -169,7 +173,7 @@
 			<tbody>
 				<tr>
 					<td class="bordered auto-width">
-						<table>
+						<table class="full-height">
 							<tbody id="document-nav">
 								<!-- nav items -->
 							</tbody>
