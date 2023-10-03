@@ -4,7 +4,7 @@
 		new Loader().load(sources,
 		// onDone
 		function(loader) {
-			console.log("minimum resources loaded...", loader);
+			console.log("minimum resources loaded...", loader.import);
 			try {
 				var {MainApplication} = loader.import;
 				new MainApplication(loader);
@@ -14,13 +14,13 @@
 			}
 		},
 		// onLoad
-		function(type, name) {
-			console.log("application.js loaded %s -> %s", type, name);
+		function(filename) {
+			console.log("init.js loaded %s", filename);
 			
 		},
 		// onError
-		function(url) {
-			console.log("resource failed to load: %s", url);
+		function(filename) {
+			console.log("resource failed to load: %s", filename);
 		});
 	});
 })();
