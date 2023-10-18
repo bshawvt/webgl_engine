@@ -7,7 +7,7 @@
 		this.animator = null;
 		this.graphics = null;
 		this.loader.load(["lib/vertex.shader", "lib/fragment.shader", 
-						  "lib/animator.js", "lib/graphics.js", "data/test.ovo", "lib/ovo_importer.js"],
+						  "lib/animator.js", "lib/graphics.js", "data/sulphur.ovo", "lib/ovo_importer.js"],
 		function(loader) {
 			console.log(loader);
 			self.init();
@@ -26,7 +26,7 @@
 		//try {
 			var {Animator, Graphics, OvoLoader} = this.loader.import;
 			var ovoimporter = new OvoLoader();
-			console.log(ovoimporter.load(this.loader.get("test.ovo").data));
+			console.log(ovoimporter.load(this.loader.get("sulphur.ovo").data));
 			this.graphics = new Graphics({loader: this.loader});
 			gfx = this.graphics.gl;
 			this.animator = new Animator(function(animator, elapsed) {
