@@ -50,7 +50,7 @@ window.docs = Object.create({
 		such as glClear color. The `opts` object supports the following properties:\n \
 		`{`\n \
 		`\xa0\xa0\xa0\xa0 useGl2` => Boolean: Create a WebGl2 context.\n \
-		`\xa0\xa0\xa0\xa0 ` => Boolean: Create a WebGl2 context.\n \
+		`\xa0\xa0\xa0\xa0 ` => ?: ?.\n \
 		`}`\n \
 		\
 		\n\n \
@@ -64,11 +64,13 @@ window.docs = Object.create({
 		\
 		",
 
-	"lib/loader.js": "A class that dynamically imports scripts and media into the active document.\n\n\
+	"lib/loader.js": "A class that dynamically imports scripts and media into the active document in a first in first out order.\n\n\
 		Images, audio, json, and other binary files are imported as Resource objects. \
 		Resources can be retrieved with the `Loader.get` method.\n \
-		Loaded scripts can export objects, classes, functions, etc through the global window object \
-		and imported later through `Loader.import`. Eg, `window.export = {MyClass, MyOtherClass}`.\n\n \
+		Dynamically imported scripts are supported but if a script inherits from any other script then \
+		load order becomes important. When scripts are imported with a closure the global window \
+		objects `export` property can be used to encapsulate any script content and later imported \
+		through `Loader.import`. Eg, the script should contain a line similar to `window.export = {MyClass, MyData}`.\n\n \
 		\
 		Example usage:\n \
 		`new Loader().load('myclass.js', 'path/item.png', function(loader) { \n\
@@ -89,5 +91,7 @@ window.docs = Object.create({
 		\
 		Loader.get(`filename` => String):\n \
 		\xa0\xa0\xa0\xa0 Expects filename to be trimmed. Eg, `filename.png` instead of `path/filename.png`. Returns Resource or null.\n\n \
-		A Resource object is defined as: `{ filename: String, data: Object }`\n\n"
+		A Resource object is defined as: `{ filename: String, extension: String, data: Ambiguous }`\nA Resource object will always \
+		contain the `filename`, `extension`, and `data` properties which are often used internally. \
+		It may also contain application defined properties and the application may overwrite and reuse the `data` property.\n\n"
 });

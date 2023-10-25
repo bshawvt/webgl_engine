@@ -7,42 +7,53 @@
 		this.animator = null;
 		this.graphics = null;
 		this.loader.load(["lib/vertex.shader", "lib/fragment.shader", 
-						  "lib/animator.js", "lib/graphics.js", "data/sulphur.ovo", "lib/ovo_importer.js"],
+						  "lib/animator.js", "lib/graphics.js", 
+						  "data/sulphwur.ovo", "data/test.ovo", 
+						  "lib/meshimporter.js", "lib/ovo_importer.js"],
 		function(loader) {
-			console.log(loader);
-			self.init();
-		},
+			console.log("ondone");
+			self.initialize(loader);
+		});/*,
 		function(filename) {
 			console.log("onload", filename);
-			
 		},
 		function(filename) {
 			console.log("error", filename); 
-		});
+		});*/
+		console.log(this);
 	};
 	
-	MainApplication.prototype.init = function() {
+	MainApplication.prototype.initialize = function(loader) {
 		var self = this;
 		//try {
-			var {Animator, Graphics, OvoLoader} = this.loader.import;
-			var ovoimporter = new OvoLoader();
-			console.log(ovoimporter.load(this.loader.get("sulphur.ovo").data));
-			this.graphics = new Graphics({loader: this.loader});
-			gfx = this.graphics.gl;
-			this.animator = new Animator(function(animator, elapsed) {
-				self.update(animator, elapsed);
-			}, function(animator, elapsed) {
-				self.render(animator, elapsed);
-			});
-			// todo: this overlay is messy
-			this.animator.showOverlay();
-
-			// webgl setup
-			//console.log(this.graphics);
+		var {Animator, Graphics, OvoLoader} = loader.import;
+		var importer = new OvoLoader();
+		//console.log(ovoimporter.load(this.loader.get("sulphur.ovo").data));
+		this.graphics = gfx = new Graphics({loader: loader});
+		
+		// import meshes and convert to models 
+		loader.resources.forEach(function(resource) {
+			var ext = resource.extension.toLowerCase();
+			if (ext == "ovo") {
+				gfx.createModel(importer.parse(resource.data), resource);
+			}
+		});
 
 
-			// begin
-			this.animator.animate();
+		this.animator = new Animator(function(animator, elapsed) {
+			self.update(animator, elapsed);
+		}, function(animator, elapsed) {
+			self.render(animator, elapsed);
+		});
+		// todo: this overlay is messy
+		this.animator.showOverlay();
+
+		// webgl setup
+		//console.log(this.graphics);
+
+
+		// begin
+		this.animator.animate();
 		//}
 	//	catch (e) {
 //			console.trace("application.js error: %s", e);
@@ -56,7 +67,7 @@
 
 	MainApplication.prototype.render = function(context, elapsed) {
 		this.graphics.clear();
-		this.graphics.drawModel(this.loader.get("triangles"));
+		//this.graphics.drawModel(this.loader.get("triangles"));
 	};
 
 	window.export = {
