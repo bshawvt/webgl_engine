@@ -8,8 +8,8 @@
 		this.graphics = null;
 		this.loader.load(["lib/vertex.shader", "lib/fragment.shader", 
 						  "lib/animator.js", "lib/graphics.js", 
-						  "data/sulphwur.ovo", "data/test.ovo", 
-						  "lib/meshimporter.js", "lib/ovo_importer.js"],
+						  "data/sulphur.ovo", "data/test.ovo", 
+						  "lib/ovo_importer.js"],
 		function(loader) {
 			console.log("ondone");
 			self.initialize(loader);
@@ -35,7 +35,11 @@
 		loader.resources.forEach(function(resource) {
 			var ext = resource.extension.toLowerCase();
 			if (ext == "ovo") {
-				gfx.createModel(importer.parse(resource.data), resource);
+				var mesh = importer.parse(resource.data);
+				if (mesh.metadata && mesh.metadata.ovo_version == "1")
+					gfx.createModel(importer.parse(resource.data), resource);
+				else
+					console.warn("bad ovo mesh");
 			}
 		});
 
