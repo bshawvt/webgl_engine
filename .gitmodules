@@ -1,0 +1,3 @@
+[submodule "lib/glmatrix"]
+	path = lib/glmatrix
+	url = https://github.com/toji/gl-matrix.git
